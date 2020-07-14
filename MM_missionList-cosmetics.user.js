@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         MM_missionList-cosmetics
 // @namespace    http://tampermonkey.net/
-// @version      0.1
+// @version      0.2
 // @description  try to take over the world!
 // @author       You
 // @match        https://*.missionchief.com/
@@ -19,5 +19,6 @@
       ".mission_panel_green > .panel-heading { background-color: lightgreen!important; }" +
       ".panel-default>.panel-heading { background-image: none!important; }" +
       "#missions-panel-body .panel { margin-bottom: -2px; }" +
+      ".missionSideBarEntry .panel-heading { padding-top: 0px !important; padding-bottom: 0px !important; } " +
       "</style>").appendTo("head");
 })();
