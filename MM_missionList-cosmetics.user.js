@@ -2,7 +2,7 @@
 // ==UserScript==
 // @name         MM_missionList-cosmetics
 // @namespace    http://tampermonkey.net/
-// @version      1.0
+// @version      1.1
 // @description  try to take over the world!
 // @author       You
 // @match        https://*.missionchief.com/
@@ -13,6 +13,11 @@
 
 (function() {
     'use strict';
+
+    var strReplace = [];
+    strReplace = strReplace.concat("Verkeersongeval=VKO");
+    strReplace = strReplace.concat("(Melding via OMS / PAC)=(OMS/PAC)");
+    strReplace = strReplace.concat("Brand in=BR");
 
     $("<style type='text/css' id='MM_missionList-cosmetics'>" +
       ".mission_panel_red > .panel-heading { background-color: #c9302c5e !important; }" +
@@ -41,24 +46,41 @@
     setTimeout(() => { moveProgressBar(); }, 2000);
     missionMarkerAdd = function(e) {
         original_func.apply(this, arguments);
+        strReplace.forEach(function(item, index) {
+            item = item.split("=");
+            var content = document.getElementById("mission_caption_" + e.id).innerHTML;
+            content = content.replace(item[0], item[1]);
+            document.getElementById("mission_caption_" + e.id).innerHTML = content;
+        });
         $("#mission_vehicle_state_" + e.id).prependTo("#mission_panel_heading_" + e.id);
         if ($("#mission_panel_heading_" + e.id + " > #creditsmissionlistlabel_" + e.id + "").length == "1") { $("#mission_bar_outer_" + e.id + "").insertBefore("#creditsmissionlistlabel_" + e.id + "");}
+        else if ($("#mission_panel_heading_" + e.id + " > #creditsmissionlist_" + e.id + "").length == "1") { $("#mission_bar_outer_" + e.id + "").insertBefore("#creditsmissionlist_" + e.id + "");}
         else { $("#mission_bar_outer_" + e.id).appendTo("#mission_panel_heading_" + e.id); }
         $("#mission_panel_heading_" + e.id + " #mission_bar_outer_" + e.id).addClass("pull-right progressbarMod");
         $("#mission_address_" + e.id).css("display", "none");
         if ($("#mission_old_caption_" + e.id)) { $("#mission_old_caption_" + e.id).css("display", "none"); }
+
     }
     function moveProgressBar() {
         var i = 0;
-        var missionList = $("#mission_list .missionSideBarEntry").not(".mission_deleted");
+        var missionList = $(".missionSideBarEntry").not(".mission_deleted");
         for (i = 0; i < missionList.length; i++) {
             var mission_id = missionList[i].getAttribute("mission_id");
+            strReplace.forEach(function(item, index) {
+                item = item.split("=");
+                var content = document.getElementById("mission_caption_" + mission_id).innerHTML;
+                content = content.replace(item[0], item[1]);
+                document.getElementById("mission_caption_" + mission_id).innerHTML = content;
+            });
             $("#mission_vehicle_state_" + mission_id).prependTo("#mission_panel_heading_" + mission_id);
             if ($("#mission_panel_heading_" + mission_id + " > #creditsmissionlistlabel_" + mission_id).length == "1") { $("#mission_bar_outer_" + mission_id).insertBefore("#creditsmissionlistlabel_" + mission_id); }
+            else if ($("#mission_panel_heading_" + mission_id + " > #creditsmissionlist_" + mission_id).length == "1") { $("#mission_bar_outer_" + mission_id).insertBefore("#creditsmissionlist_" + mission_id); }
             else { $("#mission_bar_outer_" + mission_id).appendTo("#mission_panel_heading_" + mission_id); }
             $("#mission_panel_heading_" + mission_id + " #mission_bar_outer_" + mission_id).addClass("pull-right progressbarMod");
             $("#mission_address_" + mission_id).css("display", "none");
             if ($("#mission_old_caption_" + mission_id)) { $("#mission_old_caption_" + mission_id).css("display", "none"); }
+            //console.log(document.getElementById("mission_caption_" + mission_id).textContent);
+
 
         }
 
