@@ -18,6 +18,7 @@
     strReplace = strReplace.concat("Verkeersongeval=VKO");
     strReplace = strReplace.concat("(Melding via OMS / PAC)=(OMS/PAC)");
     strReplace = strReplace.concat("Brand in=BR");
+    strReplace = strReplace.concat(",=");
 
     $("<style type='text/css' id='MM_missionList-cosmetics'>" +
       ".mission_panel_red > .panel-heading { background-color: #c9302c5e !important; }" +
